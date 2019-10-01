@@ -4,12 +4,16 @@
   "description": "React Blur Admin - Styles And Components",
   "main": "dist",
   "scripts": {
-    "start": "react-scripts start",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "clean": "rm -rf dist && mkdir dist && mkdir dist/assets && mkdir dist/assets/styles && mkdir dist/assets/fonts && mkdir dist/assets/img",
+    "deploy": "npm run clean && npm run deployjs && npm run deploycss && npm run deployassets",
+    "deployassets": "cp -R src/assets/fonts dist/assets && cp -R src/assets/img dist/assets",
+    "deploycss": "node-sass -r src/assets/styles/app.scss dist/assets/styles/react-blur-admin.min.css && cp -R src/assets/styles/bootstrap/fonts/* dist/assets/fonts",
+    "deployjs": "babel -d dist src",
+    "lint": "node_modules/.bin/eslint --ext js src/",
+    "prepublish": "npm run deploy",
+    "build": "npm run deploy",
+    "preversion": "npm run lint && npm run test",
+    "test": "NODE_ENV=test NODE_PATH=. ./node_modules/.bin/mocha test/.setup.js test --recursive"
   },
   "repository": {
     "type": "git",
